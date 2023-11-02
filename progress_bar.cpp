@@ -1,10 +1,15 @@
+#ifndef PROGRESS_BAR_HPP
+#define PROGRESS_BAR_HPP
+
 #include <SFML/Graphics.hpp>
 
 #include <algorithm>
 #include <iostream>
 
+#include "abstract_rectangle_shape.cpp"
 
-class ProgressBar : public sf::Drawable {
+
+class ProgressBar : public AbstractRectangleShape {
     private:
         sf::RectangleShape m_full;
         sf::RectangleShape m_empty;
@@ -35,7 +40,7 @@ class ProgressBar : public sf::Drawable {
             setPosition(m_position);
         }
 
-        void setSize(sf::Vector2f size) {
+        virtual void setSize(sf::Vector2f size) {
             m_size = size;
             m_thickness = m_size.y * 0.05;
 
@@ -54,7 +59,7 @@ class ProgressBar : public sf::Drawable {
             setPosition(m_position);
         }
 
-        void setPosition(sf::Vector2f position) {
+        virtual void setPosition(sf::Vector2f position) {
             m_position = position;
 
             m_full.setPosition(m_position);
@@ -64,40 +69,10 @@ class ProgressBar : public sf::Drawable {
         double& getProgress() {
             return m_progress;
         }
+
+        virtual sf::Vector2f getSize() {
+            return m_size;
+        }
 };
 
-
-// ProgressBar::ProgressBar(double progress, sf::Vector2f size, sf::Vector2f position, sf::Color color) : progress(progress) {
-//     full_size = sf::Vector2f(size.x * progress, size.y);
-//     empty_size = sf::Vector2f(size.x * (1 - progress), size.y);
-    
-//     full = sf::RectangleShape(full_size);
-//     empty = sf::RectangleShape(empty_size);
-
-//     full.setPosition(position);
-//     empty.setPosition(sf::Vector2f(position.x + full_size.x, position.y));
-
-//     full.setFillColor(color);
-//     empty.setFillColor(sf::Color::White);
-// }
-
-// ProgressBar::~ProgressBar() {
-// }
-
-// void ProgressBar::draw(sf::RenderTarget &window, sf::RenderStates states) const {
-//     window.draw(full, states);
-//     window.draw(empty, states);
-// }
-
-// void ProgressBar::setSize(sf::Vector2f size) {
-//     full_size = sf::Vector2f(size.x * progress, size.y);
-//     empty_size = sf::Vector2f(size.x * (1 - progress), size.y);
-    
-//     full.setSize(full_size);
-//     empty.setSize(empty_size);
-// }
-
-// void ProgressBar::setPosition(sf::Vector2f position) {
-//     full.setPosition(position);
-//     empty.setPosition(sf::Vector2f(position.x + full_size.x, position.y));
-// }
+#endif

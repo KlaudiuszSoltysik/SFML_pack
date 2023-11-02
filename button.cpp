@@ -1,7 +1,14 @@
+#ifndef BUTTON_HPP
+#define BUTTON_HPP
+
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
 
-class Button : public sf::Drawable{
+#include "abstract_rectangle_shape.cpp"
+
+
+class Button : public AbstractRectangleShape {
     private:
         sf::RectangleShape m_rectangle;
         sf::Text m_text;
@@ -12,7 +19,7 @@ class Button : public sf::Drawable{
     public:
         Button(sf::RectangleShape rectangle, sf::Text text, std::function<void()> on_click, sf::RenderWindow& window) : m_rectangle(rectangle), m_text(text), m_on_click(on_click), m_window(window) {}
 
-        void setSize(sf::Vector2f size) {
+        virtual void setSize(sf::Vector2f size) {
             m_size = size;
 
             m_rectangle.setSize(m_size);
@@ -21,7 +28,7 @@ class Button : public sf::Drawable{
             m_text.setPosition(sf::Vector2f(m_position.x + ((m_size.x - m_text.getGlobalBounds().width) / 2), m_position.y));
         }
 
-        void setPosition(sf::Vector2f position) {
+        virtual void setPosition(sf::Vector2f position) {
             m_position = position;
 
             m_rectangle.setPosition(m_position);
@@ -48,6 +55,10 @@ class Button : public sf::Drawable{
             return m_text;
         }
 
+        virtual sf::Vector2f getSize() {
+            return m_size;
+        }
+
         virtual void draw(sf::RenderTarget &window, sf::RenderStates states) const {
             window.draw(m_rectangle, states);
             window.draw(m_text, states);
@@ -61,3 +72,5 @@ class Button : public sf::Drawable{
             }
         }
 };
+
+#endif
