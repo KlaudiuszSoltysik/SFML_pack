@@ -1,5 +1,5 @@
-#ifndef FLEX_BOX_HPP
-#define FLEX_BOX_HPP
+#ifndef SHAPE_CONTAINER_HPP
+#define SHAPE_CONTAINER_HPP
 
 #include <SFML/Graphics.hpp>
 
@@ -9,7 +9,7 @@
 #include "abstract_rectangle_shape.cpp"
 
 
-class FlexBox : public sf::RectangleShape {
+class ShapeContainer : public sf::RectangleShape {
     private:
         sf::RectangleShape m_box;
         sf::Vector2f m_size;
@@ -18,7 +18,7 @@ class FlexBox : public sf::RectangleShape {
         std::vector<AbstractRectangleShape*> m_container;
         int m_spacing = 4;
     public:
-        FlexBox(sf::RenderWindow& window) : m_window(window) {}
+        ShapeContainer(sf::RenderWindow& window) : m_window(window) {}
 
         void setSpacing(int spacing) {
             m_spacing = spacing;
@@ -38,11 +38,24 @@ class FlexBox : public sf::RectangleShape {
 
         virtual void draw(sf::RenderTarget &window, sf::RenderStates states) const {
             int x_offset = 0;
+            int max_height = m_container[0]->getSize().y;
 
             for (AbstractRectangleShape* element : m_container) {
-                element->setPosition(sf::Vector2f(m_position.x + x_offset, m_position.y));
+                int height = element->getSize().y;
 
-                x_offset += element->getSize().x + m_spacing;
+                if (height > max_height) {
+                    max_height = height;
+                }
+            }
+
+            int baseline = max_height / 2 + m_position.y; 
+
+            for (AbstractRectangleShape* element : m_container) {
+                sf::Vector2f size = element->getSize();
+
+                element->setPosition(sf::Vector2f(m_position.x + x_offset, baseline - size.y / 2));
+
+                x_offset += size.x + m_spacing;
 
                 window.draw(*element, states);
             }
